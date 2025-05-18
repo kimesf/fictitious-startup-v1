@@ -10,3 +10,5 @@ jobs:
     uses: ./.github/workflows/terraform.yml
     with:
       action: "apply"
+    secrets:
+      aws_budget_creator_role: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}

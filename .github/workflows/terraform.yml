@@ -6,6 +6,9 @@ on:
       action:
         required: true
         type: string  # "plan" or "apply"
+    secrets:
+      aws_budget_creator_role:
+        required: true
 
 jobs:
   terraform:
@@ -19,7 +22,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-2
-          role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+          role-to-assume: ${{ secrets.aws_budget_creator_role }}
 
       - uses: actions/checkout@v4
 
