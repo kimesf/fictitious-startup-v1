@@ -1,4 +1,4 @@
-name: Build - trigger
+name: Build
 
 env:
   AWS_BUDGET_CREATOR_ROLE: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
