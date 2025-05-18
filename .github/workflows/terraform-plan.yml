@@ -1,0 +1,11 @@
+name: Terraform Plan
+
+on: pull_request
+
+jobs:
+  terraform-plan:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      action: "plan"
+    secrets:
+      aws_budget_creator_role: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}

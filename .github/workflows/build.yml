@@ -1,6 +1,0 @@
-name: Build
-on: pull_request
-jobs:
-  hello-world:
-    runs-on: ubuntu-latest
-      - run: echo "Hello, world!"

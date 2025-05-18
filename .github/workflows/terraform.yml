@@ -1,0 +1,44 @@
+name: Terraform
+
+on:
+  workflow_call:
+    inputs:
+      action:
+        required: true
+        type: string  # "plan" or "apply"
+    secrets:
+      aws_budget_creator_role:
+        required: true
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: ${{ secrets.aws_budget_creator_role }}
+
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform plan
+        id: plan
+        run: terraform -chdir=terraform plan -no-color -out=tfplan
+
+      - name: Perform Action
+        run: |
+          if [ "${{ inputs.action }}" = "apply" ]; then
+            terraform -chdir=terraform apply -auto-approve tfplan
+          else
+            terraform -chdir=terraform show -no-color tfplan
+          fi
