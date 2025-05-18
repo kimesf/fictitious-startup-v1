@@ -1,12 +1,14 @@
-name: Build
+name: Terraform
 
-env:
-  AWS_BUDGET_CREATOR_ROLE: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
-
-on: pull_request
+on:
+  workflow_call:
+    inputs:
+      action:
+        required: true
+        type: string  # "plan" or "apply"
 
 jobs:
-  configure-aws-credentials:
+  terraform:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -30,5 +32,10 @@ jobs:
         id: plan
         run: terraform -chdir=terraform plan -no-color -out=tfplan
 
-      - name: Show Plan
-        run: terraform -chdir=terraform show -no-color tfplan
+      - name: Perform Action
+        run: |
+          if [ "${{ inputs.action }}" = "apply" ]; then
+            terraform -chdir=terraform apply -auto-approve tfplan
+          else
+            terraform -chdir=terraform show -no-color tfplan
+          fi

@@ -1,0 +1,12 @@
+name: Terraform Apply
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-apply:
+    uses: ./.github/workflows/terraform.yml
+    with:
+      action: "apply"
