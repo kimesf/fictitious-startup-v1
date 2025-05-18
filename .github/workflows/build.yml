@@ -20,10 +20,15 @@ jobs:
           role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
 
       - uses: actions/checkout@v4
+
       - uses: hashicorp/setup-terraform@v3
-      - run: terraform -chdir=terraform init
-      - id: plan
-        run: terraform -chdir=terraform plan -no-color -out
-      - run: echo ${{ steps.plan.outputs.stdout }}
-      - run: echo ${{ steps.plan.outputs.stderr }}
-      - run: echo ${{ steps.plan.outputs.exitcode }}
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform plan
+        id: plan
+        run: terraform -chdir=terraform plan -no-color -out=tfplan
+
+      - name: Show Plan
+        run: terraform -chdir=terraform show -no-color tfplan
