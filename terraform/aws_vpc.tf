@@ -32,38 +32,48 @@ resource "aws_subnet" "private_b" {
   availability_zone = "us-east-2b"
 }
 
-resource "aws_route_table" "route_table_a_1" {
+resource "aws_route_table" "public_a" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = aws_subnet.public_a.cidr_block
+    cidr_block = '0.0.0.0/0'
     gateway_id = aws_internet_gateway.main.id
   }
 }
 
-resource "aws_route_table" "route_table_a_2" {
+resource "aws_route_table" "private_a" {
   vpc_id = aws_vpc.main.id
-
-  route {
-    cidr_block = aws_subnet.private_a.cidr_block
-    gateway_id = "local"
-  }
 }
 
-resource "aws_route_table" "route_table_b_1" {
+resource "aws_route_table" "public_b" {
   vpc_id = aws_vpc.main.id
 
   route {
-    cidr_block = aws_subnet.public_b.cidr_block
+    cidr_block = '0.0.0.0/0'
     gateway_id = aws_internet_gateway.main.id
   }
 }
 
-resource "aws_route_table" "route_table_b_2" {
+resource "aws_route_table" "private_b" {
   vpc_id = aws_vpc.main.id
+}
 
-  route {
-    cidr_block = aws_subnet.private_b.cidr_block
-    gateway_id = "local"
-  }
+resource "aws_route_table_association" "route_table_association_a_public" {
+  subnet_id      = aws_subnet.public_a.id
+  route_table_id = aws_route_table.public_a.id
+}
+
+resource "aws_route_table_association" "route_table_association_a_private" {
+  subnet_id      = aws_subnet.private_a.id
+  route_table_id = aws_route_table.private_a.id
+}
+
+resource "aws_route_table_association" "route_table_association_b_public" {
+  subnet_id      = aws_subnet.public_b.id
+  route_table_id = aws_route_table.public_b.id
+}
+
+resource "aws_route_table_association" "route_table_association_b_private" {
+  subnet_id      = aws_subnet.private_b.id
+  route_table_id = aws_route_table.private_b.id
 }
