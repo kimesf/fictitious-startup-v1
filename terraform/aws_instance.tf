@@ -3,7 +3,7 @@ resource "aws_instance" "app_a" {
   instance_type = "t2.micro"
   subnet_id = aws_subnet.public_a.id
   associate_public_ip_address = true
-  security_groups = [aws_security_group.zone_a.name]
+  vpc_security_group_ids = [aws_security_group.zone_a.id]
   iam_instance_profile = aws_iam_instance_profile.ssm_instance_profile.name
 }
 
