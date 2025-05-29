@@ -116,7 +116,7 @@ touch /opt/app/tmp/nginx_config
 cat <<EOF | sudo tee /opt/app/tmp/nginx_config > /dev/null
 server {
     listen 80;
-    server_name $(curl -s ifconfig.me);
+    server_name $(curl -s http://checkip.amazonaws.com);
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
