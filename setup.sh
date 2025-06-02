@@ -38,7 +38,7 @@ sudo systemctl start postgresql
 #
 # Relevant link: https://www.tutorialspoint.com/linux-source-command
 #################################################################################################
-source /opt/app/secrets.sh
+sourc $APP_DIR/secrets.sh
 
 #################################################################################################
 # Configure PostgreSQL database based on details from secrets.sh
@@ -58,33 +58,33 @@ EOF
 #
 # Relevant link: https://www.geeksforgeeks.org/sed-command-in-linux-unix-with-examples/
 #################################################################################################
-sed -i "s/REPLACE_SECRET_KEY/$SECRET_KEY/" /opt/app/cloudtalents/settings.py
-sed -i "s/REPLACE_DATABASE_USER/$DB_USER/" /opt/app/cloudtalents/settings.py
-sed -i "s/REPLACE_DATABASE_PASSWORD/$DB_PASSWORD/" /opt/app/cloudtalents/settings.py
+sed -i "s/REPLACE_SECRET_KEY/$SECRET_KEY/" $APP_DIR/cloudtalents/settings.py
+sed -i "s/REPLACE_DATABASE_USER/$DB_USER/" $APP_DIR/cloudtalents/settings.py
+sed -i "s/REPLACE_DATABASE_PASSWORD/$DB_PASSWORD/" $APP_DIR/cloudtalents/settings.py
 
 #################################################################################################
 # Create a Python virtual environment in the current directory and activate it
 #
 # Relevant link: https://www.liquidweb.com/blog/how-to-setup-a-python-virtual-environment-on-ubuntu-18-04/
 #################################################################################################
-python3 -m venv /opt/app/venv
-source /opt/app/venv/bin/activate
+python3 -m venv $APP_DIR/venv
+source $APP_DIR/venv/bin/activate
 
 #################################################################################################
 # Install the Python dependencies listed in requirements.txt
 #
 # Relevant link: https://realpython.com/what-is-pip/
 #################################################################################################
-pip install -r /opt/app/requirements.txt
+pip install -r $APP_DIR/requirements.txt
 
 # Apply Django migrations
 # didnt work with
-python3 /opt/app/manage.py makemigrations
-python3 /opt/app/manage.py migrate
+python3 $APP_DIR/manage.py makemigrations
+python3 $APP_DIR/manage.py migrate
 
 # Set up Gunicorn to serve the Django application
-touch /opt/app/tmp/gunicorn.service
-cat <<EOF | sudo tee /opt/app/tmp/gunicorn.service > /dev/null
+touch $APP_DIR/tmp/gunicorn.service
+cat <<EOF | sudo tee $APP_DIR/tmp/gunicorn.service > /dev/null
 [Unit]
 Description=gunicorn daemon
 After=network.target
@@ -101,7 +101,7 @@ ExecStart=$PWD/venv/bin/gunicorn \
 [Install]
 WantedBy=multi-user.target
 EOF
-sudo mv /opt/app/tmp/gunicorn.service /etc/systemd/system/gunicorn.service
+sudo mv $APP_DIR/tmp/gunicorn.service /etc/systemd/system/gunicorn.service
 
 #################################################################################################
 # Start and enable the Gunicorn service
@@ -112,8 +112,8 @@ sudo systemctl start gunicorn
 
 # Configure Nginx to proxy requests to Gunicorn
 sudo rm /etc/nginx/sites-enabled/default
-touch /opt/app/tmp/nginx_config
-cat <<EOF | sudo tee /opt/app/tmp/nginx_config > /dev/null
+touch $APP_DIR/tmp/nginx_config
+cat <<EOF | sudo tee $APP_DIR/tmp/nginx_config > /dev/null
 server {
     listen 80;
     server_name $(curl -s http://checkip.amazonaws.com);
