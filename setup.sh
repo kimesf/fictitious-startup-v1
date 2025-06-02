@@ -1,13 +1,14 @@
 #!/bin/bash
 
 APP_DIR="/opt/app"
+OWNER_USER="$(whoami)"
 
 #################################################################################################
 # Make the ubuntu user owner of all files and directories under $APP_DIR (recursively)
 #
 # Relevant link: https://www.geeksforgeeks.org/chown-command-in-linux-with-examples/
 #################################################################################################
-sudo chown -R "$(whoami)":"$(whoami)" .
+sudo chown -R "$OWNER_USER":"$OWNER_USER" .
 
 #################################################################################################
 # Update Ubuntu's package list and install the following dependencies:
@@ -90,7 +91,7 @@ Description=gunicorn daemon
 After=network.target
 
 [Service]
-User=$(whoami)
+User=$OWNER_USER
 Group=www-data
 WorkingDirectory=$APP_DIR
 ExecStart=$PWD/venv/bin/gunicorn \
