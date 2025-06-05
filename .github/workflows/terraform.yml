@@ -7,8 +7,13 @@ on:
         required: true
         type: string  # "plan" or "apply"
     secrets:
-      aws_budget_creator_role:
+      AWS_BUDGET_CREATOR_ROLE:
         required: true
+      DB_USER:
+        required: true
+      DB_PASSWORD:
+        required: true
+
 
 jobs:
   terraform:
@@ -22,7 +27,7 @@ jobs:
         with:
           audience: sts.amazonaws.com
           aws-region: us-east-2
-          role-to-assume: ${{ secrets.aws_budget_creator_role }}
+          role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
 
       - uses: actions/checkout@v4
 
@@ -32,10 +37,15 @@ jobs:
         run: terraform -chdir=terraform init
 
       - name: Terraform plan
-        id: plan
+        env:
+          TF_VAR_db_username: ${{ secrets.DB_USER }}
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: terraform -chdir=terraform plan -no-color -out=tfplan
 
       - name: Perform Action
+        env:
+          TF_VAR_db_username: ${{ secrets.DB_USER }}
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
         run: |
           if [ "${{ inputs.action }}" = "apply" ]; then
             terraform -chdir=terraform apply -auto-approve tfplan

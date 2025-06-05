@@ -17,7 +17,7 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-resource "aws_security_group" "zone_a" {
+resource "aws_security_group" "zone_a_public" {
   vpc_id = aws_vpc.main.id
 
   ingress {

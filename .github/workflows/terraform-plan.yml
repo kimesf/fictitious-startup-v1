@@ -8,4 +8,6 @@ jobs:
     with:
       action: "plan"
     secrets:
-      aws_budget_creator_role: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+      AWS_BUDGET_CREATOR_ROLE: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
