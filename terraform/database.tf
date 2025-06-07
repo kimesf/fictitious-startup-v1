@@ -44,5 +44,5 @@ resource "aws_db_instance" "default" {
     Name = "mvp-db-instance"
   }
 
-  depends_on = [aws_security_group.zone_a_private]
+  depends_on = [aws_security_group.zone_a_private, aws_security_group.zone_b_private]
 }
