@@ -13,7 +13,7 @@ resource "aws_db_subnet_group" "zone_a" {
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
 
-resource "aws_db_instance" "default" {
+resource "aws_db_instance" "mvp_db_instance" {
   allocated_storage = 20
   db_name = "mvp"
   engine = "postgres"
