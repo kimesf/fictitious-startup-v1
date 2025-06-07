@@ -13,6 +13,7 @@ resource "aws_dms_replication_instance" "dms_replication_instance" {
   apply_immediately = true
   availability_zone = local.region_a
   replication_instance_class = "dms.t3.micro"
+  replication_instance_id= "dms-replication-instance"
   replication_subnet_group_id = aws_dms_replication_subnet_group.dms_replication_subnet_group.id
 
   vpc_security_group_ids = [
