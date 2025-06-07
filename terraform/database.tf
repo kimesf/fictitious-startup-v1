@@ -1,4 +1,4 @@
-resource "aws_db_parameter_group" "db_parameter_group" {
+resource "aws_db_parameter_group" "default" {
   name = "default-postgres16"
   family = "postgres16"
 
@@ -26,7 +26,7 @@ resource "aws_security_group" "zone_a_private" {
   }
 }
 
-resource "aws_db_instance" "mvp_db_instance" {
+resource "aws_db_instance" "default" {
   allocated_storage = 1
   db_name = "mvp"
   engine = "postgres"
@@ -36,7 +36,7 @@ resource "aws_db_instance" "mvp_db_instance" {
   password = var.db_password
   skip_final_snapshot = true
   availability_zone = "us-east-2a"
-  parameter_group_name = aws_db_parameter_group.db_parameter_group.name
+  parameter_group_name = aws_db_parameter_group.default.name
   db_subnet_group_name = aws_db_subnet_group.db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.zone_a_private.id]
 
