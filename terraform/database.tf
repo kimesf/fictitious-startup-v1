@@ -27,7 +27,7 @@ resource "aws_security_group" "zone_a_private" {
 }
 
 resource "aws_db_instance" "default" {
-  allocated_storage = 1
+  allocated_storage = 20
   db_name = "mvp"
   engine = "postgres"
   engine_version = "16.3"
