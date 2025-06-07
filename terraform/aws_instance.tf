@@ -34,6 +34,8 @@ resource "aws_security_group" "zone_a_public" {
     protocol = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  lifecycle { create_before_destroy = true }
 }
 
 resource "aws_iam_role" "ssm_role" {

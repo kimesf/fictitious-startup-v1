@@ -24,6 +24,8 @@ resource "aws_security_group" "zone_a_private" {
     protocol = "tcp"
     security_groups = [aws_security_group.zone_a_public.id]
   }
+
+  lifecycle { create_before_destroy = true }
 }
 
 resource "aws_db_instance" "mvp_db_instance" {
