@@ -10,7 +10,7 @@ resource "aws_db_parameter_group" "default" {
 
 resource "aws_db_subnet_group" "zone_a" {
   name = "zone-a-db-subnet-group"
-  subnet_ids = [aws_subnet.private_a.id]
+  subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
 
 resource "aws_security_group" "zone_a_private" {
