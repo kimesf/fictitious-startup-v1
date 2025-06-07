@@ -8,9 +8,9 @@ resource "aws_db_parameter_group" "default" {
   }
 }
 
-resource "aws_db_subnet_group" "zone_a" {
-  name = "zone-a-db-subnet-group"
-  subnet_ids = [aws_subnet.private_a.id]
+resource "aws_db_subnet_group" "db_subnet_group" {
+  name = "zone-db-subnet-group"
+  subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
 
 resource "aws_security_group" "zone_a_private" {
@@ -37,10 +37,12 @@ resource "aws_db_instance" "default" {
   skip_final_snapshot = true
   availability_zone = "us-east-2a"
   parameter_group_name = aws_db_parameter_group.default.name
-  db_subnet_group_name = aws_db_subnet_group.zone_a.name
+  db_subnet_group_name = aws_db_subnet_group.db_subnet_group.name
   vpc_security_group_ids = [aws_security_group.zone_a_private.id]
 
   tags = {
     Name = "mvp-db-instance"
   }
+
+  depends_on = [aws_security_group.zone_a_private, aws_security_group.zone_b_private]
 }
