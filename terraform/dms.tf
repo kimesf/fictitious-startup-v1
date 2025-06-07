@@ -10,7 +10,7 @@ resource "aws_dms_replication_subnet_group" "dms_replication_subnet_group" {
 resource "aws_dms_replication_instance" "dms_replication_instance" {
   allocated_storage = 20
   apply_immediately = true
-  availability_zone = locals.region_a
+  availability_zone = local.region_a
   replication_instance_class = "dms.t3.micro"
   replication_subnet_group_id = aws_dms_replication_subnet_group.dms_replication_subnet_group.id
 

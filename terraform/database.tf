@@ -22,7 +22,7 @@ resource "aws_db_instance" "mvp_db_instance" {
   username = var.db_username
   password = var.db_password
   skip_final_snapshot = true
-  availability_zone = locals.region_a
+  availability_zone = local.region_a
   parameter_group_name = aws_db_parameter_group.default.name
   db_subnet_group_name = aws_db_subnet_group.zone_a.name
   vpc_security_group_ids = [aws_security_group.zone_a_private.id]
