@@ -13,19 +13,6 @@ resource "aws_db_subnet_group" "zone_a" {
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 }
 
-resource "aws_security_group" "zone_a_private" {
-  name = "zone-a-private-sg"
-  vpc_id = aws_vpc.main.id
-
-  ingress {
-    description = "Allow inbound traffic from server"
-    from_port = 5432
-    to_port = 5432
-    protocol = "tcp"
-    security_groups = [aws_security_group.zone_a.id]
-  }
-}
-
 resource "aws_db_instance" "default" {
   allocated_storage = 20
   db_name = "mvp"
@@ -35,10 +22,11 @@ resource "aws_db_instance" "default" {
   username = var.db_username
   password = var.db_password
   skip_final_snapshot = true
-  availability_zone = "us-east-2a"
+  availability_zone = locals.availability_zone_a
   parameter_group_name = aws_db_parameter_group.default.name
   db_subnet_group_name = aws_db_subnet_group.zone_a.name
   vpc_security_group_ids = [aws_security_group.zone_a_private.id]
+  apply_immediately = true
 
   tags = {
     Name = "mvp-db-instance"
