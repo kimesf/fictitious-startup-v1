@@ -31,7 +31,7 @@ resource "aws_dms_endpoint" "source" {
   engine_name = "postgres"
   username = var.db_username
   password = var.db_password
-  server_name = aws_instance.app_a.public_ip
+  server_name = aws_instance.app_a.private_ip
   port = 5432
   database_name = aws_db_instance.mvp_db_instance.db_name
 
