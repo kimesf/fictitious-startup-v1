@@ -1,11 +1,19 @@
 resource "aws_security_group" "zone_a" {
   name = "zone-a-sg"
   vpc_id = aws_vpc.main.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group" "zone_a_private" {
   name = "zone-a-private-sg"
   vpc_id = aws_vpc.main.id
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group_rule" "zone_a_ingress_http" {
