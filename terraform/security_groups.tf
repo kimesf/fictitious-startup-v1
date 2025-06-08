@@ -1,5 +1,5 @@
-resource "aws_security_group" "zone_a" {
-  name = "zone-a-sg"
+resource "aws_security_group" "zone_a_public" {
+  name = "zone-a-public-sg"
   vpc_id = aws_vpc.main.id
 }
 
