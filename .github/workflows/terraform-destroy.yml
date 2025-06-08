@@ -1,0 +1,31 @@
+name: Terraform destroy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform destroy
+        env:
+          TF_VAR_db_username: ${{ secrets.DB_USER }}
+          TF_VAR_db_password: ${{ secrets.DB_PASSWORD }}
+        run: terraform -chdir=terraform destroy -no-color -auto-approve
