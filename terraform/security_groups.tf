@@ -1,4 +1,5 @@
 resource "aws_security_group" "zone_a" {
+  name = "zone-a-sg"
   vpc_id = aws_vpc.main.id
 }
 
