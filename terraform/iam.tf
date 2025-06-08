@@ -32,17 +32,12 @@ data "aws_iam_policy_document" "dms_assume_role" {
   }
 }
 
-resource "aws_iam_role" "dms_access_for_endpoint" {
-  name               = "dms_access_for_endpoint"
-  assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
-}
-
 resource "aws_iam_role" "dms_vpc_role" {
-  name               = "dms-vpc-role"
+  name = "dms-vpc-role"
   assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
 }
 
-resource "aws_iam_role_policy_attachment" "dms_vpc_role_attachment" {
+resource "aws_iam_role_policy_attachment" "dms_vpc_management_attachment" {
+  role = aws_iam_role.dms_vpc_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
-  role       = aws_iam_role.dms_vpc_role.name
 }
