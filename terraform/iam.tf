@@ -40,4 +40,6 @@ resource "aws_iam_role" "dms_vpc_role" {
 resource "aws_iam_role_policy_attachment" "dms_vpc_management_attachment" {
   role = aws_iam_role.dms_vpc_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
+
+  depends_on = [aws_iam_role.dms_vpc_role]
 }
