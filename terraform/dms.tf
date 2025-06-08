@@ -1,7 +1,7 @@
 resource "aws_dms_replication_subnet_group" "dms_replication_subnet_group" {
+  replication_subnet_group_id = "dms-replication-subnet-group"
   replication_subnet_group_description = "DMS Replication Subnet Group"
   subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
-  replication_subnet_group_id = aws_subnet.private_a.id
 
   tags = {
     Name = "dms-replication-subnet-group"
