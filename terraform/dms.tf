@@ -21,9 +21,7 @@ resource "aws_dms_replication_instance" "dms_replication_instance" {
   ]
 
   depends_on = [
-    aws_iam_role_policy_attachment.dms_access_for_endpoint_AmazonDMSRedshiftS3Role,
-    aws_iam_role_policy_attachment.dms_cloudwatch_logs_role_AmazonDMSCloudWatchLogsRole,
-    aws_iam_role_policy_attachment.dms_vpc_role_AmazonDMSVPCManagementRole
+    aws_iam_role_policy_attachment.dms_vpc_management_attachment
   ]
 }
 
