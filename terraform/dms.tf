@@ -73,7 +73,7 @@ locals {
     rules = [
       {
         "rule-type" = "selection"
-        "rule-id" = "include-all-tables-and-schemas"
+        "rule-id" = "1"
         "rule-name" = "include-all-tables-and-schemas"
         "object-locator" = {
           "schema-name" = "%"
