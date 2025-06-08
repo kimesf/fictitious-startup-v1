@@ -21,22 +21,22 @@ resource "aws_security_group" "zone_a_private" {
   vpc_id = aws_vpc.main.id
 }
 
-# resource "aws_security_group_rule" "zone_a_to_zone_a_private" {
-#   type              = "ingress"
-#   from_port         = 5432
-#   to_port           = 5432
-#   protocol          = "tcp"
-#   security_group_id = aws_security_group.zone_a_private.id
-#   source_security_group_id = aws_security_group.zone_a.id
-#   description       = "Allow inbound traffic from zone_a"
-# }
-#
-# resource "aws_security_group_rule" "zone_a_private_to_zone_a" {
-#   type              = "ingress"
-#   from_port         = 5432
-#   to_port           = 5432
-#   protocol          = "tcp"
-#   security_group_id = aws_security_group.zone_a.id
-#   source_security_group_id = aws_security_group.zone_a_private.id
-#   description       = "Allow inbound traffic from zone_a_private"
-# }
+resource "aws_security_group_rule" "zone_a_to_zone_a_private" {
+  type              = "ingress"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  security_group_id = aws_security_group.zone_a_private.id
+  source_security_group_id = aws_security_group.zone_a.id
+  description       = "Allow inbound traffic from zone_a"
+}
+
+resource "aws_security_group_rule" "zone_a_private_to_zone_a" {
+  type              = "ingress"
+  from_port         = 5432
+  to_port           = 5432
+  protocol          = "tcp"
+  security_group_id = aws_security_group.zone_a.id
+  source_security_group_id = aws_security_group.zone_a_private.id
+  description       = "Allow inbound traffic from zone_a_private"
+}
