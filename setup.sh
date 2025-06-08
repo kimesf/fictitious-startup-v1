@@ -39,7 +39,7 @@ sudo systemctl start postgresql
 #
 # Relevant link: https://www.tutorialspoint.com/linux-source-command
 #################################################################################################
-sourc $APP_DIR/secrets.sh
+source $APP_DIR/secrets.sh
 
 #################################################################################################
 # Configure PostgreSQL database based on details from secrets.sh
@@ -84,6 +84,7 @@ python3 $APP_DIR/manage.py makemigrations
 python3 $APP_DIR/manage.py migrate
 
 # Set up Gunicorn to serve the Django application
+mkdir tmp
 touch $APP_DIR/tmp/gunicorn.service
 cat <<EOF | sudo tee $APP_DIR/tmp/gunicorn.service > /dev/null
 [Unit]
@@ -134,10 +135,10 @@ server {
     }
 }
 EOF
-sudo mv /tmp/nginx_config /etc/nginx/sites-available/cloudtalents
+sudo mv $APP_DIR/tmp/nginx_config /etc/nginx/sites-available/cloudtalents
 
 # Enable and test the Nginx configuration
-ln -s /etc/nginx/sites-available/cloudtalents /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/cloudtalents /etc/nginx/sites-enabled
 sudo nginx -t
 
 #################################################################################################
