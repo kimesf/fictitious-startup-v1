@@ -2,9 +2,12 @@ locals {
   s3_origin_id = "assets-mvp"
 }
 
-resource "aws_s3_bucket" "assets" {
-  bucket = "mvp-assets"
+resource "random_id" "bucket_suffix" {
+  byte_length = 4
+}
 
+resource "aws_s3_bucket" "assets" {
+  bucket = "mvp-assets-${random_id.bucket_suffix.hex}"
   tags = {
     Name = "mvp-assets"
   }
