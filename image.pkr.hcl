@@ -11,6 +11,12 @@ packer {
   }
 }
 
+local {
+  tags = {
+    Amazon_AMI_Management_Identifier = "true"
+  }
+}
+
 variable "region" {
   default = "us-east-2"
 }
@@ -37,10 +43,7 @@ source "amazon-ebs" "ubuntu" {
   vpc_id                      = "vpc-0d7a451d098b295b7"
   subnet_id                   = "subnet-0b7eaa6297f378e42"
   associate_public_ip_address = true
-
-  tags = {
-    Amazon_AMI_Management_Identifier = "true"
-  }
+  tags                        = local.tags
 }
 
 build {
@@ -72,12 +75,8 @@ build {
   }
 
   post-processor "amazon-ami-management" {
-    ami_regions     = [var.region]
-    keep_releases   = 2
-    ami_name_filter = "cloudtalents-startup-*"
-    tag_value_filter {
-      key   = "Amazon_AMI_Management_Identifier"
-      value = "true"
-    }
+    regions       = [var.region]
+    keep_releases = 2
+    tags          = local.tags
   }
 }
