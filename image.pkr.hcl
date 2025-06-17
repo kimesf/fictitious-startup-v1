@@ -67,10 +67,13 @@ build {
     ]
   }
 
-  post-processor "amazon-ami-cleanup" {
-    keep_last = 2
-    filters = {
-      "tag:Amazon_AMI_Management_Identifier" = "true"
+  post-processor "amazon-ami-management" {
+    ami_regions     = [var.region]
+    keep_releases   = 2
+    ami_name_filter = "cloudtalents-startup-*"
+    tag_value_filter {
+      key   = "Amazon_AMI_Management_Identifier"
+      value = "true"
     }
   }
 }
