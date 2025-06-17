@@ -1,3 +1,4 @@
+# TODO: move both to dictionary
 variable "db_username" {
   description = "Database administrator username"
   type        = string
