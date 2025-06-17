@@ -40,7 +40,7 @@ source "amazon-ebs" "ubuntu" {
   instance_type               = "t2.micro"
   ssh_username                = "ubuntu"
   ami_name                    = "cloudtalents-startup-${var.version}"
-  vpc_id                      = "vpc-0d7a451d098b295b7"
+  vpc_id                      = "vpc-0f770dae34d7b300c"
   subnet_id                   = "subnet-0b7eaa6297f378e42"
   associate_public_ip_address = true
   tags                        = local.tags
