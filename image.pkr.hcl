@@ -66,19 +66,15 @@ build {
     inline = [
       "sudo mkdir -p /opt/app",
       "sudo cp -r /tmp/app/* /opt/app/",
-      "sudo rm -rf /tmp/app"
+      "sudo rm -rf /tmp/app",
+      "sudo chown -R ${local.ssh_username}:${local.ssh_username} /opt/app",
     ]
-  }
-
-  provisioner "file" {
-    source      = "setup.sh"
-    destination = "/tmp/setup.sh"
   }
 
   provisioner "shell" {
     inline = [
-      "chmod +x /tmp/setup.sh",
-      "sudo /tmp/setup.sh"
+      "chmod +x /opt/app/setup.sh",
+      "sudo /opt/app/setup.sh"
     ]
   }
 

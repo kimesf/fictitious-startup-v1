@@ -3,12 +3,12 @@
 APP_DIR="/opt/app"
 OWNER_USER="ubuntu"
 
-#################################################################################################
-# Make the ubuntu user owner of all files and directories under $APP_DIR (recursively)
-#
-# Relevant link: https://www.geeksforgeeks.org/chown-command-in-linux-with-examples/
-#################################################################################################
-sudo chown -R "$OWNER_USER":"$OWNER_USER" .
+# #################################################################################################
+# # Make the ubuntu user owner of all files and directories under $APP_DIR (recursively)
+# #
+# # Relevant link: https://www.geeksforgeeks.org/chown-command-in-linux-with-examples/
+# #################################################################################################
+# sudo chown -R "$OWNER_USER":"$OWNER_USER" .
 
 #################################################################################################
 # Update Ubuntu's package list and install the following dependencies:
@@ -20,7 +20,7 @@ sudo chown -R "$OWNER_USER":"$OWNER_USER" .
 #################################################################################################
 sudo apt update && sudo apt install -y \
     python3-pip \
-    python3-venv \
+    python3.10-venv \
     nginx
 
 #################################################################################################
@@ -39,7 +39,7 @@ source $APP_DIR/venv/bin/activate
 pip install -r $APP_DIR/requirements.txt
 
 # Set up Gunicorn to serve the Django application
-mkdir tmp
+mkdir $APP_DIR/tmp
 touch $APP_DIR/tmp/gunicorn.service
 cat <<EOF | sudo tee $APP_DIR/tmp/gunicorn.service > /dev/null
 [Unit]
