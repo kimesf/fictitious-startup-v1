@@ -51,6 +51,32 @@ resource "aws_iam_role_policy_attachment" "s3_app_a_attach" {
   policy_arn = aws_iam_policy.assets_crud.arn
 }
 
+resource "aws_iam_policy" "ssm_read_startup_params" {
+  name        = "ssm-read-startup-params"
+  description = "Allow reading all SSM parameters under /cloudtalents/startup/"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement: [
+      {
+        Effect = "Allow",
+        Action: [
+          "ssm:GetParameters",
+          "ssm:GetParameter",
+          "ssm:GetParameterHistory",
+          "ssm:DescribeParameters"
+        ],
+        Resource: "arn:aws:ssm:${local.region}:${data.aws_caller_identity.current.account_id}:parameter/cloudtalents/startup/*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_startup_attach" {
+  role       = aws_iam_role.ssm_role.name
+  policy_arn = aws_iam_policy.ssm_read_startup_params.arn
+}
+
 # TODO: rename and move to dms.tf
 data "aws_iam_policy_document" "dms_assume_role" {
   statement {
