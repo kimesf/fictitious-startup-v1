@@ -11,7 +11,7 @@ packer {
   }
 }
 
-local {
+locals {
   tags = {
     Amazon_AMI_Management_Identifier = "true"
   }
