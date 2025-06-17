@@ -9,6 +9,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4.1.0
+      with:
+        audience: sts.amazonaws.com
+        aws-region: us-east-2
+        role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+
     - name: Checkout repository
       uses: actions/checkout@v4
 
