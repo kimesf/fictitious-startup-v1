@@ -19,8 +19,8 @@ resource "aws_db_instance" "mvp_db_instance" {
   engine = "postgres"
   engine_version = "16.8"
   instance_class = "db.t3.micro"
-  username = var.db_username
-  password = var.db_password
+  username = aws_ssm_parameter.secure_parameters["db_user"].value
+  password = aws_ssm_parameter.secure_parameters["db_password"].value
   skip_final_snapshot = true
   availability_zone = local.region_a
   parameter_group_name = aws_db_parameter_group.default.name
