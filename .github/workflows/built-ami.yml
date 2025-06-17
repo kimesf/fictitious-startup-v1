@@ -1,0 +1,22 @@
+name: Build AMI on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-ami:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Packer
+      uses: hashicorp/setup-packer@v3
+
+    - name: Build AMI with Packer
+      run: |
+        packer init .
+        packer validate image.pkr.hcl
+        packer build -var "version=${{ github.event.release.tag_name }}" image.pkr.hcl

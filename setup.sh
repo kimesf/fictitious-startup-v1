@@ -1,7 +1,7 @@
 #!/bin/bash
 
 APP_DIR="/opt/app"
-OWNER_USER="$(whoami)"
+OWNER_USER="ubuntu"
 
 #################################################################################################
 # Make the ubuntu user owner of all files and directories under $APP_DIR (recursively)
