@@ -18,5 +18,5 @@ jobs:
     - name: Build AMI with Packer
       run: |
         packer init .
-        packer validate image.pkr.hcl
+        packer validate -var "version=${{ github.event.release.tag_name }}" image.pkr.hcl
         packer build -var "version=${{ github.event.release.tag_name }}" image.pkr.hcl
