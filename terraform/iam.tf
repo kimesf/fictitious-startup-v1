@@ -66,7 +66,7 @@ resource "aws_iam_policy" "ssm_read_startup_params" {
           "ssm:GetParameterHistory",
           "ssm:DescribeParameters"
         ],
-        Resource: "arn:aws:ssm:${locals.region}:${data.aws_caller_identity.current.account_id}:parameter/cloudtalents/startup/*"
+        Resource: "arn:aws:ssm:${local.region}:${data.aws_caller_identity.current.account_id}:parameter/cloudtalents/startup/*"
       }
     ]
   })
