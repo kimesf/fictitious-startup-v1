@@ -58,11 +58,10 @@ build {
     ]
   }
 
-}
-
-post-processor "amazon-ami-cleanup" {
-  keep_last = 2
-  filters = {
-    "tag:Amazon_AMI_Management_Identifier" = "true"
+  post-processor "amazon-ami-cleanup" {
+    keep_last = 2
+    filters = {
+      "tag:Amazon_AMI_Management_Identifier" = "true"
+    }
   }
 }
