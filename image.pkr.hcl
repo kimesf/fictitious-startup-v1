@@ -15,6 +15,7 @@ locals {
   tags = {
     Amazon_AMI_Management_Identifier = "true"
   }
+  ssh_username = "ubuntu"
 }
 
 variable "region" {
@@ -38,7 +39,7 @@ source "amazon-ebs" "ubuntu" {
   }
 
   instance_type               = "t2.micro"
-  ssh_username                = "ubuntu"
+  ssh_username                = local.ssh_username
   ami_name                    = "cloudtalents-startup-${var.version}"
   vpc_id                      = "vpc-0f770dae34d7b300c"
   subnet_id                   = "subnet-0b7eaa6297f378e42"
@@ -52,6 +53,7 @@ build {
   provisioner "shell" {
     inline = [
       "sudo mkdir -p /tmp/app",
+      "sudo chown -R ${local.ssh_username}:${local.ssh_username} /tmp/app",
     ]
   }
 
