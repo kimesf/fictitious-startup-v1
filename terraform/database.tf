@@ -17,7 +17,7 @@ resource "aws_db_instance" "mvp_db_instance" {
   allocated_storage = 20
   db_name = "mvp"
   engine = "postgres"
-  engine_version = "16.3"
+  engine_version = "16.8"
   instance_class = "db.t3.micro"
   username = var.db_username
   password = var.db_password
