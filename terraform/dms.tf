@@ -29,8 +29,8 @@ resource "aws_dms_endpoint" "source" {
   endpoint_id = "dms-instance-source-endpoint"
   endpoint_type = "source"
   engine_name = "postgres"
-  username = var.db_username
-  password = var.db_password
+  username = aws_ssm_parameter.secure_parameters["db_user"].value
+  password = aws_ssm_parameter.secure_parameters["db_password"].value
   server_name = aws_instance.app_a.private_ip
   port = 5432
   database_name = aws_db_instance.mvp_db_instance.db_name
@@ -42,8 +42,8 @@ resource "aws_dms_endpoint" "target" {
   endpoint_id = "dms-rds-target-endpoint"
   endpoint_type = "target"
   engine_name = "postgres"
-  username = var.db_username
-  password = var.db_password
+  username = aws_ssm_parameter.secure_parameters["db_user"].value
+  password = aws_ssm_parameter.secure_parameters["db_password"].value
   server_name = aws_db_instance.mvp_db_instance.address
   port = 5432
   database_name = aws_db_instance.mvp_db_instance.db_name

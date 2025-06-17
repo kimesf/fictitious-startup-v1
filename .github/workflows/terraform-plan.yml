@@ -9,5 +9,3 @@ jobs:
       action: "plan"
     secrets:
       AWS_BUDGET_CREATOR_ROLE: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
