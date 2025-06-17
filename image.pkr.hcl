@@ -49,9 +49,15 @@ source "amazon-ebs" "ubuntu" {
 build {
   sources = ["source.amazon-ebs.ubuntu"]
 
+  provisioner "shell" {
+    inline = [
+      "sudo mkdir -p /tmp/app",
+    ]
+  }
+
   provisioner "file" {
     source      = "./"
-    destination = "/tmp/app"
+    destination = "/tmp/app/"
   }
 
   provisioner "shell" {
