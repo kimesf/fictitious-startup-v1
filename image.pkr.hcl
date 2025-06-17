@@ -51,13 +51,13 @@ build {
 
   provisioner "file" {
     source      = "./"
-    destination = "/tmp/app"
+    destination = "/tmp/app/"
   }
 
   provisioner "shell" {
     inline = [
       "sudo mkdir -p /opt/app",
-      "sudo mv /tmp/app/* /opt/app/",
+      "sudo cp -r /tmp/app/* /opt/app/",
       "sudo rm -rf /tmp/app"
     ]
   }
