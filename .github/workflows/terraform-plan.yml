@@ -3,9 +3,28 @@ name: Terraform Plan
 on: pull_request
 
 jobs:
-  terraform-plan:
-    uses: ./.github/workflows/terraform.yml
-    with:
-      action: "plan"
-    secrets:
-      AWS_BUDGET_CREATOR_ROLE: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+  terraform_plan:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform plan
+        run: terraform -chdir=terraform plan -no-color -out=tfplan
+
+      - name: Perform Action
+        run: terraform -chdir=terraform show -no-color tfplan
