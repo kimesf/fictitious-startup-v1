@@ -3,6 +3,8 @@
 APP_DIR="/opt/app"
 OWNER_USER="ubuntu"
 
+export DEBIAN_FRONTEND=noninteractive
+
 # #################################################################################################
 # # Make the ubuntu user owner of all files and directories under $APP_DIR (recursively)
 # #
@@ -18,7 +20,7 @@ OWNER_USER="ubuntu"
 #
 # Relevant link: https://ubuntu.com/server/docs/package-management
 #################################################################################################
-DEBIAN_FRONTEND=noninteractive sudo apt update && sudo apt install -y \
+sudo apt update && sudo apt install -y \
     python3-pip \
     python3.10-venv \
     nginx
