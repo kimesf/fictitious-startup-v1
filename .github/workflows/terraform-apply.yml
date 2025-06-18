@@ -4,9 +4,40 @@ on:
   workflow_dispatch:
 
 jobs:
-  terraform-apply:
-    uses: ./.github/workflows/terraform.yml
-    with:
-      action: "apply"
-    secrets:
-      aws_budget_creator_role: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+  terraform_apply:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          audience: sts.amazonaws.com
+          aws-region: us-east-2
+          role-to-assume: ${{ secrets.AWS_BUDGET_CREATOR_ROLE }}
+
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform init
+        run: terraform -chdir=terraform init
+
+      - name: Terraform plan
+        run: terraform -chdir=terraform plan -no-color -out=tfplan
+
+      - name: Show contents of aws_instance.tf
+        run: cat terraform/aws_instance.tf
+
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          git fetch --tags
+          echo "tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> "$GITHUB_OUTPUT"
+
+      - name: Perform Action
+        run: |
+          RELEASE_VERSION="${{ steps.get_tag.outputs.tag }}"
+          echo "RELEASE_VERSION=${RELEASE_VERSION}"
+          terraform -chdir=terraform apply -auto-approve -var="release_version=$RELEASE_VERSION" tfplan
