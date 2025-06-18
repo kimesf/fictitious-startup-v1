@@ -10,7 +10,6 @@ on:
       AWS_BUDGET_CREATOR_ROLE: # TOOD: this name doesn't make sense
         required: true
 
-
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -38,7 +37,8 @@ jobs:
       - name: Perform Action
         run: |
           if [ "${{ inputs.action }}" = "apply" ]; then
-            terraform -chdir=terraform apply -auto-approve tfplan
+            RELEASE_VERSION="${{ github.ref_name }}"
+            terraform -chdir=terraform apply -auto-approve -var="release_version=$RELEASE_VERSION" tfplan
           else
             terraform -chdir=terraform show -no-color tfplan
           fi

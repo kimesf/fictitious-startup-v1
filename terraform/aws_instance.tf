@@ -13,10 +13,16 @@ resource "aws_instance" "app_a" {
 
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners = ["099720109477"]
+  owners      = ["self"]
 
   filter {
     name= "name"
-    values = ["ubuntu/images/*ubuntu-jammy-22.04-amd64-server*"]
+    values = ["cloudtalents-startup-${var.release_version}"]
   }
+}
+
+variable "release_version" {
+  description = "Version of the AMI to deploy"
+  type        = string
+  default     = "*"
 }
