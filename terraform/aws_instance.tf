@@ -24,4 +24,5 @@ data "aws_ami" "ubuntu" {
 variable "release_version" {
   description = "Version of the AMI to deploy"
   type        = string
+  default     = "*"
 }
