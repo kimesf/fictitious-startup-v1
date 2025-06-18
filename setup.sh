@@ -25,6 +25,12 @@ sudo apt update && sudo apt install -y \
     python3.10-venv \
     nginx
 
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+aws configure set region us-east-2
+
 #################################################################################################
 # Create a Python virtual environment in the current directory and activate it
 #
