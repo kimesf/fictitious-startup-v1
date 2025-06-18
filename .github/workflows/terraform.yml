@@ -37,11 +37,17 @@ jobs:
       - name: Show contents of aws_instance.tf
         run: cat terraform/aws_instance.tf
 
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          git fetch --tags
+          echo "tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> "$GITHUB_OUTPUT"
+
       - name: Perform Action
         run: |
           if [ "${{ inputs.action }}" = "apply" ]; then
-            RELEASE_VERSION="${{ github.ref_name }}"
-            echo "Release version: $RELEASE_VERSION"
+            RELEASE_VERSION="${{ steps.get_tag.outputs.tag }}"
+            echo "RELEASE_VERSION=${RELEASE_VERSION}"
             terraform -chdir=terraform apply -auto-approve -var="release_version=$RELEASE_VERSION" tfplan
           else
             terraform -chdir=terraform show -no-color tfplan
