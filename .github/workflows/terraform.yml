@@ -32,8 +32,6 @@ jobs:
         run: terraform -chdir=terraform init
 
       - name: Terraform plan
-        env:
-          TF_VAR_release_version: ${{ github.ref_name }}
         run: terraform -chdir=terraform plan -no-color -out=tfplan
 
       - name: Perform Action
