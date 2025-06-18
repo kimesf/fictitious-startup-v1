@@ -40,6 +40,4 @@ jobs:
         run: |
           RELEASE_VERSION="${{ steps.get_tag.outputs.tag }}"
           export TF_VAR_release_version="$RELEASE_VERSION"
-          echo "Release version set to: $RELEASE_VERSION"
-          echo "TF_VAR_release_version=$TF_VAR_release_version"
           terraform -chdir=terraform apply -auto-approve tfplan

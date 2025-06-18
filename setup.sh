@@ -74,7 +74,7 @@ touch $APP_DIR/tmp/nginx_config
 cat <<EOF | sudo tee $APP_DIR/tmp/nginx_config > /dev/null
 server {
     listen 80;
-    server_name $(curl -s http://checkip.amazonaws.com);
+    server_name 18.190.217.33;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
