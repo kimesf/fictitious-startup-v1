@@ -1,3 +1,9 @@
+variable "release_version" {
+  description = "Version of the AMI to deploy"
+  type        = string
+  default     = "*"
+}
+
 locals {
   secure_ssm_parameters = {
     secret_key  = "/cloudtalents/startup/secret_key"

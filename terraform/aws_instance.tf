@@ -20,9 +20,3 @@ data "aws_ami" "ubuntu" {
     values = ["cloudtalents-startup-${var.release_version}"]
   }
 }
-
-variable "release_version" {
-  description = "Version of the AMI to deploy"
-  type        = string
-  default     = "*"
-}
