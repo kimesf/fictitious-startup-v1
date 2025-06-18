@@ -18,7 +18,7 @@ OWNER_USER="ubuntu"
 #
 # Relevant link: https://ubuntu.com/server/docs/package-management
 #################################################################################################
-sudo apt update && sudo apt install -y \
+DEBIAN_FRONTEND=noninteractive sudo apt update && sudo apt install -y \
     python3-pip \
     python3.10-venv \
     nginx
@@ -55,6 +55,7 @@ ExecStart=$APP_DIR/venv/bin/gunicorn \
           --bind unix:/tmp/gunicorn.sock \
           cloudtalents.wsgi:application
 Environment="AWS_DEFAULT_REGION=us-east-2"
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
@@ -66,6 +67,8 @@ sudo mv $APP_DIR/tmp/gunicorn.service /etc/systemd/system/gunicorn.service
 #
 # Relevant link: https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units
 #################################################################################################
+sudo systemctl daemon-reload
+sudo systemctl enable gunicorn
 sudo systemctl start gunicorn
 
 # Configure Nginx to proxy requests to Gunicorn
