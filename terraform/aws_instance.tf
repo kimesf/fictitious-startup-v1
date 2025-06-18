@@ -13,7 +13,7 @@ resource "aws_instance" "app_a" {
 
 data "aws_ami" "ubuntu" {
   most_recent = true
-  owners      = ["099720109477"]
+  owners      = ["self"]
 
   filter {
     name= "name"
