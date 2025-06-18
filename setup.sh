@@ -23,7 +23,11 @@ export DEBIAN_FRONTEND=noninteractive
 sudo apt update && sudo apt install -y \
     python3-pip \
     python3.10-venv \
-    nginx
+    nginx \
+    awscli
+
+# test to see if this is needed to ensure that the AWS CLI can be used to interact with AWS services
+aws configure set region us-east-2
 
 #################################################################################################
 # Create a Python virtual environment in the current directory and activate it
