@@ -14,7 +14,7 @@ locals {
   dynamic_ssm_parameters = {
     database_endpoint = {
       name  = "/cloudtalents/startup/database_endpoint"
-      value = aws_db_instance.mvp_db_instance.endpoint
+      value = aws_db_instance.mvp_db_instance.address
     }
     image_storage_bucket_name = {
       name  = "/cloudtalents/startup/image_storage_bucket_name"
