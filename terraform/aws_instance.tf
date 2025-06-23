@@ -11,14 +11,6 @@ resource "aws_instance" "app_a" {
   }
 }
 
-resource "aws_eip" "app_a_ip" {
-  domain = "vpc"
-
-  instance                  = aws_instance.app_a.id
-  associate_with_private_ip = aws_instance.app_a.private_ip
-  depends_on                = [aws_internet_gateway.main]
-}
-
 data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["self"]

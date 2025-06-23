@@ -87,7 +87,6 @@ touch $APP_DIR/tmp/nginx_config
 cat <<EOF | sudo tee $APP_DIR/tmp/nginx_config > /dev/null
 server {
     listen 80;
-    server_name 3.18.63.150;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
