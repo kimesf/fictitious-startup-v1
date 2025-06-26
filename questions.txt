@@ -1,0 +1,2 @@
+usefull:
+sudo journalctl -u gunicorn.service -e
