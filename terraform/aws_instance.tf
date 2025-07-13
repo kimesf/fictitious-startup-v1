@@ -7,8 +7,6 @@ resource "aws_launch_template" "app" {
     name = aws_iam_instance_profile.ssm_instance_profile.name
   }
 
-  vpc_security_group_ids = [aws_security_group.zone_a_public.id]
-
   network_interfaces {
     associate_public_ip_address = true
     security_groups             = [aws_security_group.zone_a_public.id]
