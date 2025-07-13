@@ -28,16 +28,6 @@ resource "aws_security_group_rule" "zone_a_egress_all" {
   description       = "Allow all outbound traffic"
 }
 
-resource "aws_security_group_rule" "allow_database_access_to_zone_a" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.zone_a_public.id
-  source_security_group_id = aws_security_group.zone_a_private.id
-  description              = "Allow inbound traffic to postgres from zone_a_private"
-}
-
 resource "aws_security_group_rule" "allow_database_access_from_public_a" {
   type                     = "ingress"
   from_port                = 5432
@@ -46,34 +36,4 @@ resource "aws_security_group_rule" "allow_database_access_from_public_a" {
   security_group_id        = aws_security_group.zone_a_private.id
   source_security_group_id = aws_security_group.zone_a_public.id
   description              = "Allow inbound traffic to postgres from zone_a_public"
-}
-
-resource "aws_security_group_rule" "allow_dms_egress_to_zone_a_public" {
-  type              = "egress"
-  from_port         = 5432
-  to_port           = 5432
-  protocol          = "tcp"
-  security_group_id = aws_security_group.zone_a_private.id
-  cidr_blocks       = [aws_subnet.public_a.cidr_block]
-  description       = "Allow outbound traffic to postgres from zone_a_private to zone_a_public"
-}
-
-resource "aws_security_group_rule" "allow_internal_communication_zone_a_private_ingress" {
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.zone_a_private.id
-  source_security_group_id = aws_security_group.zone_a_private.id
-  description              = "Allow internal communication within zone_a_private ingress"
-}
-
-resource "aws_security_group_rule" "allow_internal_communication_zone_a_private_egress" {
-  type              = "egress"
-  from_port         = 5432
-  to_port           = 5432
-  protocol          = "tcp"
-  security_group_id = aws_security_group.zone_a_private.id
-  cidr_blocks       = [aws_subnet.private_a.cidr_block]
-  description       = "Allow internal communication within zone_a_private egress"
 }
