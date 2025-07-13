@@ -13,7 +13,7 @@ resource "aws_iam_role" "ssm_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_core" {
-  role = aws_iam_role.ssm_role.name
+  role       = aws_iam_role.ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
@@ -36,7 +36,7 @@ resource "aws_iam_policy" "assets_crud" {
           "s3:ListBucket",
           "s3:DeleteObject"
         ]
-        Effect   = "Allow"
+        Effect = "Allow"
         Resource = [
           aws_s3_bucket.assets.arn,
           "${aws_s3_bucket.assets.arn}/*"
@@ -57,16 +57,16 @@ resource "aws_iam_policy" "ssm_read_startup_params" {
 
   policy = jsonencode({
     Version = "2012-10-17",
-    Statement: [
+    Statement : [
       {
         Effect = "Allow",
-        Action: [
+        Action : [
           "ssm:GetParameters",
           "ssm:GetParameter",
           "ssm:GetParameterHistory",
           "ssm:DescribeParameters"
         ],
-        Resource: "arn:aws:ssm:${local.region}:${data.aws_caller_identity.current.account_id}:parameter/cloudtalents/startup/*"
+        Resource : "arn:aws:ssm:${local.region}:${data.aws_caller_identity.current.account_id}:parameter/cloudtalents/startup/*"
       }
     ]
   })
@@ -90,12 +90,12 @@ data "aws_iam_policy_document" "dms_assume_role" {
 }
 
 resource "aws_iam_role" "dms_vpc_role" {
-  name = "dms-vpc-role"
+  name               = "dms-vpc-role"
   assume_role_policy = data.aws_iam_policy_document.dms_assume_role.json
 }
 
 resource "aws_iam_role_policy_attachment" "dms_vpc_management_attachment" {
-  role = aws_iam_role.dms_vpc_role.name
+  role       = aws_iam_role.dms_vpc_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonDMSVPCManagementRole"
 
   depends_on = [aws_iam_role.dms_vpc_role]
