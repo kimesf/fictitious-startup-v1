@@ -27,9 +27,6 @@ jobs:
       - name: Terraform plan
         run: terraform -chdir=terraform plan -no-color -out=tfplan
 
-      - name: Show contents of aws_instance.tf
-        run: cat terraform/envs.tf
-
       - name: Get latest tag
         id: get_tag
         run: |
