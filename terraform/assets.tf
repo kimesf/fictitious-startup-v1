@@ -23,19 +23,19 @@ resource "aws_cloudfront_origin_access_control" "assets" {
 
 resource "aws_cloudfront_distribution" "assets_cdn" {
   origin {
-    domain_name = aws_s3_bucket.assets.bucket_regional_domain_name
-    origin_id   = local.s3_origin_id
+    domain_name              = aws_s3_bucket.assets.bucket_regional_domain_name
+    origin_id                = local.s3_origin_id
     origin_access_control_id = aws_cloudfront_origin_access_control.assets.id
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
+  enabled         = true
+  is_ipv6_enabled = true
 
   default_cache_behavior {
-    cache_policy_id  = aws_cloudfront_cache_policy.no_cache_policy.id
-    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = local.s3_origin_id
+    cache_policy_id        = aws_cloudfront_cache_policy.no_cache_policy.id
+    allowed_methods        = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods         = ["GET", "HEAD"]
+    target_origin_id       = local.s3_origin_id
     viewer_protocol_policy = "redirect-to-https"
   }
 
