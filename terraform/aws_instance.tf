@@ -18,10 +18,6 @@ resource "aws_launch_template" "app" {
       Name = "app-a"
     }
   }
-
-  monitoring {
-    enabled = true
-  }
 }
 
 resource "aws_autoscaling_group" "app" {
