@@ -77,7 +77,7 @@ resource "aws_lb" "app" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.zone_a_public.id]
-  subnets            = [aws_subnet.public_a.id]
+  subnets            = [aws_subnet.public_a.id, aws_subnet.public_b.id]
 }
 
 resource "aws_lb_target_group" "app" {
