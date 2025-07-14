@@ -1,0 +1,5 @@
+.env
+.terraform
+static
+.DS_Store
+*.log

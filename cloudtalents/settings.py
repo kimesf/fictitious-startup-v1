@@ -15,18 +15,33 @@ import os
 
 import boto3
 
-ssm = boto3.client("ssm")
-SSM_PARAMETER_NAMESPACE = "/cloudtalents/startup"
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+if os.environ.get("ENVIRONMENT") == "local":
+    DB_USER = os.environ.get("POSTGRES_USER")
+    DB_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+    DB_HOST = os.environ.get("POSTGRES_HOST")
+    DEFAULT_STORAGE_BACKEND = "django.core.files.storage.FileSystemStorage"
+    DEFAULT_STATIC_FILES_BACKEND = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    MEDIA_ROOT = f"{BASE_DIR}/media/"
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+else:
+    ssm = boto3.client("ssm")
+    SSM_PARAMETER_NAMESPACE = "/cloudtalents/startup"
+    DB_USER = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/db_user", WithDecryption=True)["Parameter"]["Value"]
+    DB_PASSWORD = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/db_password", WithDecryption=True)["Parameter"]["Value"]
+    DB_HOST = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/database_endpoint", WithDecryption=True)["Parameter"]["Value"]
+    DEFAULT_STORAGE_BACKEND = "startup.storages.PublicMediaStorage"
+    DEFAULT_STATIC_FILES_BACKEND = "startup.storages.PublicMediaStorage"
+    MEDIA_S3_BUCKET_NAME = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/image_storage_bucket_name", WithDecryption=True)["Parameter"]["Value"]
+    MEDIA_HOST = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/image_storage_cloudfront_domain", WithDecryption=True)["Parameter"]["Value"]
+    MEDIA_ROOT = '/'
+    MEDIA_URL=f'https://{MEDIA_HOST}/'
+    SECRET_KEY = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/secret_key", WithDecryption=True)["Parameter"]["Value"]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/secret_key", WithDecryption=True)["Parameter"]["Value"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -94,10 +109,10 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mvp',
         # SECURITY WARNING: this value should be kept secret! Don't push it to GitHub
-        'USER': ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/db_user", WithDecryption=True)["Parameter"]["Value"],
+        'USER': DB_USER,
         # SECURITY WARNING: this value should be kept secret! Don't push it to GitHub
-        'PASSWORD': ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/db_password", WithDecryption=True)["Parameter"]["Value"],
-        'HOST': ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/database_endpoint", WithDecryption=True)["Parameter"]["Value"],
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
         'PORT': '5432',
     }
 }
@@ -153,34 +168,37 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_S3_BUCKET_NAME = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/image_storage_bucket_name", WithDecryption=True)["Parameter"]["Value"]
-MEDIA_HOST = ssm.get_parameter(Name=f"{SSM_PARAMETER_NAMESPACE}/image_storage_cloudfront_domain", WithDecryption=True)["Parameter"]["Value"]
-MEDIA_URL=f'https://{MEDIA_HOST}/'
-MEDIA_ROOT = '/'
-
 LOGIN_REDIRECT_URL = '/images/'
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
     "handlers": {
-        "file": {
+        "console": {
             "level": "DEBUG",
-            "class": "logging.FileHandler",
-            "filename": "/opt/app/debug.log",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
         },
     },
     "root": {
-        "handlers": ["file"],
+        "handlers": ["console"],
         "level": "DEBUG",
     },
 }
 
+
+
 STORAGES = {
     "default": {
-        "BACKEND": "startup.storages.PublicMediaStorage",
+        "BACKEND": DEFAULT_STORAGE_BACKEND,
     },
     "staticfiles": {
-        "BACKEND": "startup.storages.PublicMediaStorage",
+        "BACKEND": DEFAULT_STATIC_FILES_BACKEND,
     },
 }
